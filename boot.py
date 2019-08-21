@@ -21,8 +21,8 @@ except OSError:
 for connection in connections:
     station, password = connection.split()
 
-    print("Connecting to {}.".format(station))
-    print('Password: {}'.format(password))
+    # print("Connecting to {}.".format(station))
+    # print('Password: {}'.format(password))
 
     # sta_if.connect(station, password)
     sta_if.connect('V838 Monocerotis-2G', 'Monkeys2006')
@@ -41,17 +41,17 @@ for connection in connections:
         print("Connection could not be made.\n")
 
 red_led = machine.Pin(16, machine.Pin.OUT)
-blue_led = machine.Pin(2, machine.Pin.OUT)
+# blue_led = machine.Pin(2, machine.Pin.OUT)
 
 
 def blink(length):
     red_led.value(0)
-    blue_led.value(0)
+    # blue_led.value(1)
 
     time.sleep(length)
 
     red_led.value(1)
-    blue_led.value(1)
+    # blue_led.value(0)
 
 
 if sta_if.isconnected():
@@ -70,3 +70,6 @@ if sta_if.isconnected():
             time.sleep(.5)
 
         time.sleep(2)
+
+# red_led.value(1)
+# blue_led.value(1)

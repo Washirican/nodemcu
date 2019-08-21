@@ -31,8 +31,12 @@ except:
 rtc.datetime(utime.localtime(seconds))
 
 
-pin = machine.Pin(9, machine.Pin.OUT)
+led_pin = machine.Pin(9, machine.Pin.OUT)
 switch_pin = machine.Pin(10, machine.Pin.IN)
+adc = machine.ADC(0)
+pwm = machine.Pin(13)
+pwm = machine.PWM(pwm)
+pwm.duty(1000)
 
 
 def time():
@@ -49,18 +53,17 @@ def time():
 
 def dummy():
     body = "This is a dummy endpoint"
-
     return response_template % body
 
 
 def light_on():
-    pin.value(1)
+    led_pin.value(1)
     body = "You turned a light on!"
     return response_template % body
 
 
 def light_off():
-    pin.value(0)
+    led_pin.value(0)
     body = "You turned a light off!"
     return response_template % body
 
@@ -70,12 +73,76 @@ def switch():
     return response_template % body
 
 
+def light():
+    body = "{value: " + str(adc.read()) + "}"
+    return response_template % body
+
+
+def pwm1000():
+    pwm.duty(1000)
+    body = "You turned a PWM to 1000 Hz!"
+    return response_template % body
+
+
+def pwm500():
+    pwm.duty(500)
+    body = "You turned a PWM to 500 Hz!"
+    return response_template % body
+
+
+def pwm250():
+    pwm.duty(250)
+    body = "You turned a PWM to 250 Hz!"
+    return response_template % body
+
+
+def pwm75():
+    pwm.duty(75)
+    body = "You turned a PWM to 75 Hz!"
+    return response_template % body
+
+
+def pwm10():
+    pwm.duty(10)
+    body = "You turned a PWM to 10 Hz!"
+    return response_template % body
+
+
+def home():
+    body = """<html>
+    <body>
+    <h1>NodeMCU Menu</h1>
+    <p></p>
+    <a href='time'>Current Time</a><br>
+    <a href='light_on'>LED On</a><br>
+    <a href='light_off'>LED Off</a><br>
+    <a href='switch'>Switch State</a><br>
+    <a href='light'>Photoresistor State</a><br>
+    <a href='pwm1000'>PWM 1000 Hz</a><br>
+    <a href='pwm500'>PWM 500 Hz</a><br>
+    <a href='pwm250'>PWM 250 Hz</a><br>
+    <a href='pwm75'>PWM 75 Hz</a><br>
+    <a href='pwm10'>PWM 10 Hz</a><br>
+    </body>
+    </html>
+    """
+
+    # body = '<a href="Current Time">Time</a>'
+    return response_template % body
+
+
 handlers = {
     'time': time,
     'dummy': dummy,
     'light_on': light_on,
     'light_off': light_off,
     'switch': switch,
+    'light': light,
+    'pwm1000': pwm1000,
+    'pwm500': pwm500,
+    'pwm250': pwm250,
+    'pwm75': pwm75,
+    'home': home,
     }
 
 

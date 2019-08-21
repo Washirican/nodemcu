@@ -19,6 +19,7 @@ except:
     seconds = 0
 rtc.datetime(utime.localtime(seconds))
 
+
 def time():
     body = """<html>
 <body>
