@@ -30,10 +30,15 @@ except:
     seconds = 0
 rtc.datetime(utime.localtime(seconds))
 
+
+pin = machine.Pin(9, machine.Pin.OUT)
+switch_pin = machine.Pin(10, machine.Pin.IN)
+
+
 def time():
     body = """<html>
 <body>
-<h1>Time</h1>
+<h1>Current Time</h1>
 <p>%s</p>
 </body>
 </html>
@@ -41,15 +46,38 @@ def time():
 
     return response_template % body
 
+
 def dummy():
     body = "This is a dummy endpoint"
 
     return response_template % body
 
+
+def light_on():
+    pin.value(1)
+    body = "You turned a light on!"
+    return response_template % body
+
+
+def light_off():
+    pin.value(0)
+    body = "You turned a light off!"
+    return response_template % body
+
+
+def switch():
+    body = "{state: " + str(switch_pin.value()) + "}"
+    return response_template % body
+
+
 handlers = {
     'time': time,
     'dummy': dummy,
-}
+    'light_on': light_on,
+    'light_off': light_off,
+    'switch': switch,
+    }
+
 
 def main():
     s = socket.socket()
@@ -81,9 +109,11 @@ def main():
             response = response_500
             print(str(e))
 
-        client_s.send(b"\r\n".join([line.encode() for line in response.split("\n")]))
+        client_s.send(
+            b"\r\n".join([line.encode() for line in response.split("\n")]))
 
         client_s.close()
         print()
+
 
 main()

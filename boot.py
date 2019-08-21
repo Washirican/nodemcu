@@ -1,5 +1,6 @@
 import gc
 import webrepl
+
 webrepl.start()
 gc.collect()
 
@@ -7,7 +8,8 @@ import network
 import time
 import machine
 
-sta_if = network.WLAN(network.STA_IF); sta_if.active(True)
+sta_if = network.WLAN(network.STA_IF)
+sta_if.active(True)
 
 try:
     with open("passwords.txt") as f:
@@ -16,13 +18,14 @@ except OSError:
     print("No passwords.txt file!")
     connections = []
 
-
 for connection in connections:
     station, password = connection.split()
 
     print("Connecting to {}.".format(station))
+    print('Password: {}'.format(password))
 
-    sta_if.connect(station, password)
+    # sta_if.connect(station, password)
+    sta_if.connect('V838 Monocerotis-2G', 'Monkeys2006')
 
     for i in range(15):
         print(".")
@@ -37,19 +40,24 @@ for connection in connections:
     else:
         print("Connection could not be made.\n")
 
+red_led = machine.Pin(16, machine.Pin.OUT)
+blue_led = machine.Pin(2, machine.Pin.OUT)
 
-
-builtin_led = machine.Pin(16, machine.Pin.OUT)
 
 def blink(length):
-    builtin_led.value(0)
+    red_led.value(0)
+    blue_led.value(0)
+
     time.sleep(length)
-    builtin_led.value(1)
+
+    red_led.value(1)
+    blue_led.value(1)
+
 
 if sta_if.isconnected():
     ip = sta_if.ifconfig()[0].split('.')[3]
+    print('IP Address: {}'.format(sta_if.ifconfig()[0]))
     print("Connected as: {}".format(ip))
-
 
     for digit in ip:
         blink(.1)
@@ -62,5 +70,3 @@ if sta_if.isconnected():
             time.sleep(.5)
 
         time.sleep(2)
-        
-        

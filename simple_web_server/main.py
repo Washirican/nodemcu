@@ -30,6 +30,7 @@ def time():
 
     return response_template % body
 
+
 def main():
     s = socket.socket()
     ai = socket.getaddrinfo("0.0.0.0", 8080)
@@ -56,5 +57,6 @@ def main():
 
         client_s.close()
         print()
+
 
 main()
