@@ -142,6 +142,7 @@ handlers = {
     'pwm500': pwm500,
     'pwm250': pwm250,
     'pwm75': pwm75,
+    'pwm10': pwm10,
     'home': home,
     }
 
